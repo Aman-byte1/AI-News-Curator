@@ -44,3 +44,9 @@ class NewsArticleForm(FlaskForm):
     source_name = StringField('Source Name (e.g., Reuters, BBC)', validators=[Length(max=100)])
     source_url = StringField('Original Source URL', validators=[Length(max=500)])
     submit = SubmitField('Post Article')
+class CommentForm(FlaskForm):
+    content = TextAreaField('Comment', validators=[
+        DataRequired(), 
+        Length(min=1, max=500)
+    ])
+    submit = SubmitField('Post Comment')

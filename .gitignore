@@ -4,3 +4,4 @@ code.txt
 # Ignore Python cache files
 __pycache__/
 note.txt
+/migrations/

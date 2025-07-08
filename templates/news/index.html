@@ -1,9 +1,12 @@
+<!-- news_curator/templates/news/index.html -->
 {% extends "base.html" %}
 {% block content %}
 <h1 class="text-4xl font-bold text-gray-800 mb-8 text-center">Your News Feed</h1>
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-    {% for article in articles %}
+    {# Loop through articles_with_data instead of articles #}
+    {% for data in articles_with_data %}
+    {% set article = data.article %}
     <div class="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 duration-300">
         <div class="p-6">
             <h2 class="text-2xl font-semibold text-gray-800 mb-3">{{ article.title }}</h2>
@@ -16,11 +19,41 @@
                 <a href="{{ url_for('main.article', article_id=article.id) }}" class="text-blue-600 hover:text-blue-800 font-semibold transition-colors duration-200">Read More &rarr;</a>
                 <span class="text-gray-500 text-xs">{{ article.posted_at.strftime('%Y-%m-%d %H:%M') }}</span>
             </div>
-            <div class="mt-4 flex space-x-2">
-                <a href="{{ url_for('main.record_interaction', article_id=article.id, interaction_type='liked') }}" class="bg-green-100 text-green-700 text-sm px-3 py-1 rounded-full hover:bg-green-200 transition-colors duration-200">Like</a>
-                <a href="{{ url_for('main.record_interaction', article_id=article.id, interaction_type='disliked') }}" class="bg-red-100 text-red-700 text-sm px-3 py-1 rounded-full hover:bg-red-200 transition-colors duration-200">Dislike</a>
-                <a href="{{ url_for('main.record_interaction', article_id=article.id, interaction_type='shared') }}" class="bg-blue-100 text-blue-700 text-sm px-3 py-1 rounded-full hover:bg-blue-200 transition-colors duration-200">Share</a>
-                <a href="{{ url_for('main.record_interaction', article_id=article.id, interaction_type='skipped') }}" class="bg-yellow-100 text-yellow-700 text-sm px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors duration-200">Skip</a>
+            <div class="mt-4 flex flex-wrap gap-2">
+                <!-- Like Button with Count -->
+                <a href="{{ url_for('main.record_interaction', article_id=article.id, interaction_type='liked') }}"
+                   class="flex items-center bg-green-100 text-green-700 text-sm px-3 py-1 rounded-full hover:bg-green-200 transition-colors duration-200">
+                    <i class="fas fa-thumbs-up mr-1"></i> {# Font Awesome icon #}
+                    <span>{{ data.likes_count }}</span> {# Access count from data dictionary #}
+                </a>
+                
+                <!-- Dislike Button with Count -->
+                <a href="{{ url_for('main.record_interaction', article_id=article.id, interaction_type='disliked') }}"
+                   class="flex items-center bg-red-100 text-red-700 text-sm px-3 py-1 rounded-full hover:bg-red-200 transition-colors duration-200">
+                    <i class="fas fa-thumbs-down mr-1"></i> {# Font Awesome icon #}
+                    <span>{{ data.dislikes_count }}</span> {# Access count from data dictionary #}
+                </a>
+                
+                <!-- Share Button -->
+                <a href="{{ url_for('main.record_interaction', article_id=article.id, interaction_type='shared') }}"
+                   class="flex items-center bg-blue-100 text-blue-700 text-sm px-3 py-1 rounded-full hover:bg-blue-200 transition-colors duration-200">
+                    <i class="fas fa-share-alt mr-1"></i> {# Font Awesome icon #}
+                    <span>{{ data.shares_count }}</span> {# Access count from data dictionary #}
+                </a>
+                
+                <!-- Skip Button -->
+                <a href="{{ url_for('main.record_interaction', article_id=article.id, interaction_type='skipped') }}"
+                   class="flex items-center bg-yellow-100 text-yellow-700 text-sm px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors duration-200">
+                    <i class="fas fa-forward mr-1"></i> {# Font Awesome icon #}
+                    <span>Skip</span>
+                </a>
+                
+                <!-- Comments Button with Count -->
+                <a href="{{ url_for('main.article', article_id=article.id) }}#comments"
+                   class="flex items-center bg-purple-100 text-purple-700 text-sm px-3 py-1 rounded-full hover:bg-purple-200 transition-colors duration-200">
+                    <i class="fas fa-comment mr-1"></i> {# Font Awesome icon #}
+                    <span>{{ data.comments_count }}</span> {# Access count from data dictionary #}
+                </a>
             </div>
         </div>
     </div>

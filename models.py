@@ -25,6 +25,10 @@ class User(db.Model, UserMixin):
     # Relationship to UserInteraction: A user can have many interactions
     interactions = db.relationship('UserInteraction', backref='user', lazy='dynamic')
 
+    # New: Relationship to Comment: A user can post many comments
+    comments = db.relationship('Comment', backref='author', lazy='dynamic')
+
+
     def set_password(self, password):
         """Hashes the password and stores it."""
         self.password_hash = generate_password_hash(password)
@@ -53,6 +57,9 @@ class NewsArticle(db.Model):
     # Relationship to UserInteraction: An article can have many interactions
     interactions = db.relationship('UserInteraction', backref='article', lazy='dynamic')
 
+    # New: Relationship to Comment: An article can have many comments
+    comments = db.relationship('Comment', backref='article', lazy='dynamic')
+
     def __repr__(self):
         return f"<NewsArticle {self.title}>"
 
@@ -71,3 +78,16 @@ class UserInteraction(db.Model):
 
     def __repr__(self):
         return f"<UserInteraction User:{self.user_id} Article:{self.article_id} Type:{self.interaction_type}>"
+
+class Comment(db.Model):
+    """
+    Represents a comment on a news article.
+    """
+    id = db.Column(db.Integer, primary_key=True)
+    article_id = db.Column(db.Integer, db.ForeignKey('news_article.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    posted_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"<Comment Article:{self.article_id} User:{self.user_id}>"
