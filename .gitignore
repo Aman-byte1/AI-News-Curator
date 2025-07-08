@@ -1,0 +1,6 @@
+code.txt
+/instance
+/venv
+# Ignore Python cache files
+__pycache__/
+note.txt

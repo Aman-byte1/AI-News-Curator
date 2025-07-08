@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="flex justify-center items-center h-full py-8">
+    <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl">
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Post New Article</h2>
+        <form method="POST" action="{{ url_for('main.create_news') }}">
+            {{ form.hidden_tag() }}
+            <div class="mb-6">
+                {{ form.title.label(class="block text-gray-700 text-sm font-bold mb-2") }}
+                {{ form.title(class="shadow appearance-none border rounded-md w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder="Enter article title") }}
+                {% for error in form.title.errors %}
+                    <p class="text-red-500 text-xs italic mt-2">{{ error }}</p>
+                {% endfor %}
+            </div>
+            <div class="mb-6">
+                {{ form.content.label(class="block text-gray-700 text-sm font-bold mb-2") }}
+                {{ form.content(class="shadow appearance-none border rounded-md w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-48 resize-y", placeholder="Write your article content here...") }}
+                {% for error in form.content.errors %}
+                    <p class="text-red-500 text-xs italic mt-2">{{ error }}</p>
+                {% endfor %}
+            </div>
+            <div class="mb-6">
+                {{ form.category.label(class="block text-gray-700 text-sm font-bold mb-2") }}
+                {{ form.category(class="shadow appearance-none border rounded-md w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder="e.g., Politics, Technology, Sports") }}
+                {% for error in form.category.errors %}
+                    <p class="text-red-500 text-xs italic mt-2">{{ error }}</p>
+                {% endfor %}
+            </div>
+            <div class="mb-6">
+                {{ form.source_name.label(class="block text-gray-700 text-sm font-bold mb-2") }}
+                {{ form.source_name(class="shadow appearance-none border rounded-md w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder="e.g., Reuters, BBC News") }}
+                {% for error in form.source_name.errors %}
+                    <p class="text-red-500 text-xs italic mt-2">{{ error }}</p>
+                {% endfor %}
+            </div>
+            <div class="mb-8">
+                {{ form.source_url.label(class="block text-gray-700 text-sm font-bold mb-2") }}
+                {{ form.source_url(class="shadow appearance-none border rounded-md w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder="e.g., [https://www.example.com/original-article-link](https://www.example.com/original-article-link)") }}
+                {% for error in form.source_url.errors %}
+                    <p class="text-red-500 text-xs italic mt-2">{{ error }}</p>
+                {% endfor %}
+            </div>
+            <div class="flex items-center justify-between">
+                {{ form.submit(class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline transition-colors duration-200 w-full") }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

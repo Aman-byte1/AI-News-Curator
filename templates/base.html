@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - News Curator</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Optional: Custom font for a modern look */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Basic styling for flash messages */
+        .flash-message {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 1rem;
+            border: 1px solid transparent;
+            border-radius: 0.25rem;
+        }
+        .flash-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .flash-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        .flash-info {
+            color: #0c5460;
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen flex flex-col">
+    <header class="bg-white shadow-md py-4">
+        <nav class="container mx-auto px-4 flex justify-between items-center">
+            <a href="{{ url_for('main.index') }}" class="text-2xl font-bold text-blue-600 rounded-md p-2 hover:bg-blue-50">News Curator</a>
+            <div>
+                {% if current_user.is_authenticated %}
+                    <span class="mr-4 text-gray-700">Hello, {{ current_user.username }}!</span>
+                    {% if current_user.role == 'media' %}
+                        <a href="{{ url_for('main.create_news') }}" class="text-blue-600 hover:text-blue-800 px-3 py-2 rounded-md hover:bg-blue-100 transition-colors duration-200">Post News</a>
+                    {% endif %}
+                    {% if current_user.role == 'admin' %}
+                        <a href="{{ url_for('admin.manage_media') }}" class="text-blue-600 hover:text-blue-800 px-3 py-2 rounded-md hover:bg-blue-100 transition-colors duration-200">Manage Media</a>
+                    {% endif %}
+                    <a href="{{ url_for('auth.logout') }}" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md shadow-md transition-colors duration-200">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}" class="text-blue-600 hover:text-blue-800 px-3 py-2 rounded-md hover:bg-blue-100 transition-colors duration-200">Login</a>
+                    <a href="{{ url_for('auth.register') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md shadow-md transition-colors duration-200">Register</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 flex-grow">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="mb-6">
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }} rounded-md shadow-sm" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6 mt-auto">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; {{ current_year }} AI-Powered News Curator. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Moment.js is no longer needed for the year display and has been removed. -->
+</body>
+</html>

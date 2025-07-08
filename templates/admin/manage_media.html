@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="text-4xl font-bold text-gray-800 mb-8 text-center">Manage Media Access</h1>
+
+<div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-3xl mx-auto">
+    <h2 class="text-2xl font-semibold text-gray-700 mb-6">Users Requiring Role Management</h2>
+
+    {% if users %}
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+            <thead>
+                <tr class="bg-gray-100 border-b">
+                    <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Username</th>
+                    <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Email</th>
+                    <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Current Role</th>
+                    <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr class="border-b last:border-b-0 hover:bg-gray-50">
+                    <td class="py-3 px-4 text-gray-800">{{ user.username }}</td>
+                    <td class="py-3 px-4 text-gray-800">{{ user.email }}</td>
+                    <td class="py-3 px-4 text-gray-800">
+                        <span class="px-2 py-1 rounded-full text-xs font-semibold
+                            {% if user.role == 'admin' %} bg-purple-100 text-purple-700
+                            {% elif user.role == 'media' %} bg-blue-100 text-blue-700
+                            {% else %} bg-gray-100 text-gray-700 {% endif %}">
+                            {{ user.role.capitalize() }}
+                        </span>
+                    </td>
+                    <td class="py-3 px-4">
+                        <div class="flex space-x-2">
+                            {% if user.role == 'reader' %}
+                                <a href="{{ url_for('admin.grant_media', user_id=user.id) }}"
+                                   class="bg-green-500 hover:bg-green-600 text-white text-sm font-semibold py-1.5 px-3 rounded-md transition-colors duration-200">
+                                    Grant Media
+                                </a>
+                            {% elif user.role == 'media' %}
+                                <a href="{{ url_for('admin.revoke_media', user_id=user.id) }}"
+                                   class="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-1.5 px-3 rounded-md transition-colors duration-200">
+                                    Revoke Media
+                                </a>
+                            {% else %}
+                                <span class="text-gray-500 text-sm">N/A</span>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-center text-gray-600 text-lg">No users to manage at this time.</p>
+    {% endif %}
+</div>
+{% endblock %}
